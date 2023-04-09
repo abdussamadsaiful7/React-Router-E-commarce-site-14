@@ -3,6 +3,7 @@ import { deleteShoppingCart, getStoredCart, removeFromDb } from '../../Utility/f
 import { Link, useLoaderData } from 'react-router-dom';
 import CartItem from '../Cards/CartItem';
 import { cartContext } from '../../App';
+import { toast } from 'react-hot-toast';
 
 const Review = () => {
    const [cartItem, setCartItem] = useContext(cartContext)
@@ -20,6 +21,7 @@ const Review = () => {
         const remaining = cartItem.filter(product => product.id !== id)
         setCartItem(remaining)
         removeFromDb(id);
+        toast.error('Product Removed!')
     }
 
     //delete all data from shoppingCart,
@@ -27,6 +29,7 @@ const Review = () => {
         if (cartItem.length) {
             setCartItem([])
             deleteShoppingCart()
+            return toast.success('All items Removed!')
             
           }
         deleteShoppingCart();
@@ -37,9 +40,9 @@ const Review = () => {
         if(cartItem.length>0){
             setCartItem([])
             deleteShoppingCart()
-            return alert('Order Done!')
+            return toast.success('Order Done!')
         }
-        return alert('Cart Empty!')
+        return toast.error('Cart Empty!')
     }
 
 
