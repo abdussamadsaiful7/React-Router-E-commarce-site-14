@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import ProductCard from '../Cards/ProductCard';
 import { addToDb } from '../../Utility/fackDB';
+import { productContext } from '../../App';
 
 const Shop = () => {
-    const productData = useLoaderData();
-    console.log(productData);
+    const products = useContext(productContext);
+    //console.log(products)
 
     const handlerAddToCart = id =>{
         //console.log(id);
@@ -15,7 +16,7 @@ const Shop = () => {
     return (
         <div className='product-container'>
             {
-                productData.map(product =><ProductCard 
+                products.map(product =><ProductCard 
                     key={product.id} 
                     product={product}
                     handlerAddToCart={handlerAddToCart}/>)

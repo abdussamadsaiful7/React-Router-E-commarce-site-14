@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { ShoppingCartIcon } from '@heroicons/react/24/solid'
+import { cartContext } from '../App'
 
 const Header = () => {
+  const  cart = useContext(cartContext)
+  console.log(cart)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   return (
     <div className='px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8'>
