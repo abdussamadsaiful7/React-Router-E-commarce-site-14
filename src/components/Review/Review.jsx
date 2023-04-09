@@ -1,37 +1,55 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { deleteShoppingCart, getStoredCart, removeFromDb } from '../../Utility/fackDB';
 import { Link, useLoaderData } from 'react-router-dom';
 import CartItem from '../Cards/CartItem';
+import { cartContext } from '../../App';
 
 const Review = () => {
-    const { cart } = useLoaderData();
+   const [cartItem, setCartItem] = useContext(cartContext)
     // console.log(cart)
 
     let total = 0;
-    if(cart.length>0){
-        for( const product of cart){
+    if(cartItem.length>0){
+        for( const product of cartItem){
             total =total + product.price * product.quantity;
         }
     }
 
     //remove item from cart
     const handleRemoveItem =(id)=>{
+        const remaining = cartItem.filter(product => product.id !== id)
+        setCartItem(remaining)
         removeFromDb(id);
     }
 
     //delete all data from shoppingCart,
     const  handleAllDeleteCart =()=>{
+        if (cartItem.length) {
+            setCartItem([])
+            deleteShoppingCart()
+            
+          }
         deleteShoppingCart();
+    }
+
+    //place Order
+    const orderHandler =()=>{
+        if(cartItem.length>0){
+            setCartItem([])
+            deleteShoppingCart()
+            return alert('Order Done!')
+        }
+        return alert('Cart Empty!')
     }
 
 
     return (
         <div className='flex min-h-screen items-start justify-center bg-gray-100 text-gray-900'>
             <div className='flex flex-col max-w-3xl p-6 space-y-4 sm:p-10'>
-                <h2 className='text-xl font-semibold'>{cart.length ? 'Review Cart Items' : 'Cart is Empty!'}</h2>
+                <h2 className='text-xl font-semibold'>{cartItem.length ? 'Review Cart Items' : 'Cart is Empty!'}</h2>
                 <ul className='flex flex-col divide-y divide-gray-700'>
                     {
-                        cart.map(product =><CartItem 
+                        cartItem.map(product =><CartItem 
                             key={product.id} 
                             product={product}
                             handleRemoveItem={handleRemoveItem}/>)
@@ -47,9 +65,9 @@ const Review = () => {
                 </div>
                 <div className='flex justify-end space-x-4'>
                    {
-                    cart.length >0 ? ( <button onClick={()=>handleAllDeleteCart()} className='btn-outlined'>Clear Cart</button>) : ( <Link to="/shop"><button className='btn-outlined'>Back To Shop</button></Link>)
+                    cartItem.length >0 ? ( <button onClick={handleAllDeleteCart} className='btn-outlined'>Clear Cart</button>) : ( <Link to="/shop"><button className='btn-outlined'>Back To Shop</button></Link>)
                    }
-                    <button className='btn-primary'>Place Order</button>
+                    <button onClick ={orderHandler} className='btn-primary'>Place Order</button>
                 </div>
             </div>
            

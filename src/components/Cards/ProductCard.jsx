@@ -16,7 +16,7 @@ const ProductCard = ({ product, handlerAddToCart }) => {
       <p className='text-gray-700 '>Category: {category}</p>
       <p className='text-gray-700 font-bold'>Price: ${price}</p>
       <button
-        onClick={() => handlerAddToCart (id)}
+        onClick={() => handlerAddToCart (product)}
        
         // alert('Item added in the cart')
         type='button'

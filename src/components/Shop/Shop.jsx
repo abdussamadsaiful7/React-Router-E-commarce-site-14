@@ -2,16 +2,33 @@ import React, { useContext } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import ProductCard from '../Cards/ProductCard';
 import { addToDb } from '../../Utility/fackDB';
-import { productContext } from '../../App';
+import { productContext, cartContext } from '../../App';
 
 const Shop = () => {
     const products = useContext(productContext);
+    const [cartItem, setCartItem] = useContext(cartContext)
     //console.log(products)
 
-    const handlerAddToCart = id =>{
+    const handlerAddToCart = product =>{
+        let  newCart = []
+        const exists =cartItem.find(existingProduct => existingProduct.id === product.id )
+
         //console.log(id);
-        addToDb(id);
+        if(!exists){
+            product.quantity = 1
+            newCart =[...cartItem, product]
+
+        }
+        else{
+            const rest =cartItem.filter(existingProduct => existingProduct.id !== product.id)
+            exists.quantity = exists.quantity + 1;
+            newCart =[...rest, exists]
+        }
+        setCartItem(newCart);
+        addToDb(product.id);
     }
+
+    
 
     return (
         <div className='product-container'>

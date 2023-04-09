@@ -8,7 +8,7 @@ export const productContext = createContext([])
 export const cartContext = createContext([])
 const App = () => {
   const { cart, products } = useLoaderData();
-  const {cartItem, setCartItem} =useState(cart)
+  const [cartItem, setCartItem] =useState(cart)
   console.log(cart)
   return (
 
